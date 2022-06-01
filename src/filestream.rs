@@ -1,5 +1,5 @@
 //! Stream for operating on files.
-use crate::{Stream, Result, BinaryError};
+use crate::{BinaryError, Result, Stream};
 use std::fs::{self, OpenOptions};
 use std::io::prelude::*;
 use std::io::{Error, ErrorKind, Read, SeekFrom, Write};
@@ -29,10 +29,7 @@ impl FileStream {
     pub fn new<P: AsRef<Path>>(path: P, open_type: OpenType) -> Result<FileStream> {
         let file = match open_type {
             OpenType::OpenAndCreate => fs::File::create(path)?,
-            OpenType::ReadWrite => OpenOptions::new()
-                .read(true)
-                .write(true)
-                .open(path)?,
+            OpenType::ReadWrite => OpenOptions::new().read(true).write(true).open(path)?,
             OpenType::Open => fs::File::open(path)?,
         };
         Ok(FileStream { file })
